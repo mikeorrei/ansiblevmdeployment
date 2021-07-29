@@ -25,9 +25,7 @@
     #vcenter_hostname: 10.1.2.3
     #vcenter_username: myUsername
     #vcenter_password: wrongpassword
-    vcenter_ip: "{{ VMWARE_HOST }}"
-    vcenter_user: "{{ VMWARE_USER }}"
-    vcenter_password: "{{ VMWARE_PASSWORD }}"
+    
     # below are all of the details for the VM.  I'm overriding these at runtime.
     vm_datacenter: CIC Datacenter 01
     vm_cluster: VSPEX Cluster 01
@@ -48,9 +46,9 @@
   tasks:
   - name: connect to vcenter and do a basic provisioning
     vmware_guest:
-      hostname: "{{ vcenter_ip }}"
-      username: "{{ vcenter_user }}"
-      password: "{{ vcenter_password }}"
+      hostname: "{{ VMWARE_HOST }}"
+      username: "{{ VMWARE_USER }}"
+      password: "{{ VMWARE_PASSWORD }}"
       validate_certs: no
       cluster: "{{ vm_cluster }}"
       folder: "{{ vm_folder }}"
