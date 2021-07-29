@@ -3,17 +3,17 @@
   hosts: localhost
   gather_facts: false
 
-  vars_prompt:
+  #vars_prompt:
     #login information for vCenter server
-    - name: "vcenter_hostname"
-      prompt: "vCenter Hostname"
-      private: no
-    - name: "vcenter_username"
-      prompt: "vCenter Username"
-      private: no
-    - name: "vcenter_password"
-      prompt: "vCenter Password"
-      private: yes
+    #- name: "vcenter_hostname"
+    #  prompt: "vCenter Hostname"
+    #  private: no
+    #- name: "vcenter_username"
+    #  prompt: "vCenter Username"
+    #  private: no
+    #- name: "vcenter_password"
+    #  prompt: "vCenter Password"
+    #  private: yes
 
   vars:
 #    nios_provider:
@@ -46,9 +46,9 @@
   tasks:
   - name: connect to vcenter and do a basic provisioning
     vmware_guest:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
+      hostname: "{{ VMWARE_HOST }}"
+      username: "{{ VMWARE_USER }}"
+      password: "{{ VMWARE_PASSWORD }}"
       validate_certs: no
       cluster: "{{ vm_cluster }}"
       folder: "{{ vm_folder }}"
