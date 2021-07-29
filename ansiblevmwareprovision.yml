@@ -1,0 +1,82 @@
+---
+- name: provision vcenter templates using ansible
+  hosts: localhost
+  gather_facts: false
+
+  vars_prompt:
+    #login information for vCenter server
+    - name: "vcenter_hostname"
+      prompt: "vCenter Hostname"
+      private: no
+    - name: "vcenter_username"
+      prompt: "vCenter Username"
+      private: no
+    - name: "vcenter_password"
+      prompt: "vCenter Password"
+      private: yes
+
+  vars:
+#    nios_provider:
+#      host: 1.2.3.4
+#      username: MyDDIusername
+#      password: MyDDIpassword
+
+    # vcenter variables should be passed in at run time.  I'm using a custom credential in tower.
+    #vcenter_hostname: 10.1.2.3
+    #vcenter_username: myUsername
+    #vcenter_password: wrongpassword
+
+    # below are all of the details for the VM.  I'm overriding these at runtime.
+    vm_datacenter: CIC Datacenter 01
+    vm_cluster: VSPEX Cluster 01
+    vm_name: AnsibleTestVM
+    vm_template: centos-ansible-template
+    vm_folder: /Ansible
+    vm_disksize: 50
+    vm_datastore: vsanDatastore
+    # minimum of 4GB of RAM
+    vm_memory: 4096
+    vm_cpus: 4
+    #netname is the name of the network in vcenter
+    vm_netname: 208-VM-3
+    vm_ip: 192.168.208.87
+    vm_netmask: 255.255.255.0
+    vm_gateway: 192.168.208.1
+    
+  tasks:
+  - name: connect to vcenter and do a basic provisioning
+    vmware_guest:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: no
+      cluster: "{{ vm_cluster }}"
+      folder: "{{ vm_folder }}"
+      name: "{{ vm_name }}"
+      datacenter: "{{ vm_datacenter }}"
+      state: poweredon
+#      guest_id: centos64Guest
+      template: "{{ vm_template }}"
+      # This is hostname of particular ESXi server on which user wants VM to be deployed
+      disk:
+      - size_gb: "{{ vm_disksize }}"
+        type: thin
+        datastore: "{{ vm_datastore }}"
+      hardware:
+        memory_mb: "{{ vm_memory }}"
+        num_cpus: "{{ vm_cpus}}"
+        scsi: paravirtual
+      networks:
+      - name: "{{ vm_netname}}"
+        type: static
+#        mac: aa:bb:dd:aa:00:14
+        ip: "{{ vm_ip }}"
+        netmask: "{{ vm_netmask }}"
+        gateway: "{{ vm_gateway }}"
+#        device_type: vmxnet3
+#    delegate_to: localhost
+    register: deploy_vm
+
+  - name: debug results
+    debug:
+      var: deploy_vm
