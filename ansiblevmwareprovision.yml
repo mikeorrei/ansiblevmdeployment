@@ -1,6 +1,6 @@
 ---
 - name: provision vcenter templates using ansible
-  hosts: localhost
+  #hosts: localhost
   gather_facts: false
 
   #vars_prompt:
@@ -75,8 +75,3 @@
         gateway: "{{ vm_gateway }}"
 #        device_type: vmxnet3
 #    delegate_to: localhost
-    register: deploy_vm
-
-  - name: debug results
-    debug:
-      var: deploy_vm
