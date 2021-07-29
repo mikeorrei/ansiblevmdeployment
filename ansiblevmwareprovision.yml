@@ -25,7 +25,9 @@
     #vcenter_hostname: 10.1.2.3
     #vcenter_username: myUsername
     #vcenter_password: wrongpassword
-
+    vcenter_ip: "{{ VMWARE_HOST }}"
+    vcenter_user: "{{ VMWARE_USER }}"
+    vcenter_password: "{{ VMWARE_PASSWORD }}"
     # below are all of the details for the VM.  I'm overriding these at runtime.
     vm_datacenter: CIC Datacenter 01
     vm_cluster: VSPEX Cluster 01
